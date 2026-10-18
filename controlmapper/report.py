@@ -113,5 +113,8 @@ def to_markdown(results: list, coverage: Coverage, source: str = "") -> str:
 
     lines += ["", "---", "",
               "*Method: TF-IDF similarity plus keyword phrase matching. "
-              "Scores are decision support, not audit evidence. A human reviews every low-confidence mapping.*", ""]
+              "Scores are decision support, not audit evidence. A human reviews every low-confidence mapping.*", "",
+              "*Threat data: MITRE ATT&CK Enterprise technique IDs and names. The technique-to-control links and "
+              "attacker-use weights are a curated starting set, not the official MITRE Center for Threat-Informed "
+              "Defense mapping.*", ""]
     return "\n".join(lines)

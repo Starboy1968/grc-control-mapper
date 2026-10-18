@@ -30,8 +30,15 @@ The report groups every control under one principle from the book (paraphrased, 
 Each lens gets a posture: **Fortified** (75%+), **Defensible** (50%+), **Exposed** (25%+), **Open ground** (below 25%). The report then shows:
 
 1. **Weakest ground:** the lens most open to attack.
-2. **Fix first:** the top five controls to close, High priority first.
-3. **Unverified troops:** controls with only weak support. They count as untested until an analyst confirms them.
+2. **Know the enemy:** the real attacker techniques (MITRE ATT&CK) your policy leaves open.
+3. **Fix first:** the top five controls to close, ranked by how much attacker risk each one closes.
+4. **Unverified troops:** controls with only weak support. They count as untested until an analyst confirms them.
+
+### Threat-informed ranking (MITRE ATT&CK)
+
+Each of 27 common ATT&CK techniques lists the controls that help stop it. If those controls are missing, the technique is exposed. Risk = how often attackers use it (1 to 3) x the share of its controls that are missing. A control's threat score is the exposed risk it would close, split across the missing controls so no technique is counted many times. The result: the fix-first list says *"close SI-4 first because it helps stop credential theft and data exfiltration,"* not just *"SI-4 is missing."*
+
+**Honest limits:** the technique-to-control links and the 1 to 3 weights are a curated starting set I wrote from public ATT&CK mitigations and common breach reporting. They are **not** the official MITRE Center for Threat-Informed Defense mapping. The report says so on every run.
 
 ## How it works
 
@@ -46,7 +53,7 @@ Policy file → Parser → Mapper → Analyst review → Gap analysis → Strate
 2. **Mapper** scores each statement against each control with TF-IDF cosine similarity plus a boost for exact control phrases. Pure Python, deterministic, and every score lists the terms that caused it.
 3. **Review queue:** scores below 0.45 are flagged. Analysts accept or reject them in a JSON decisions file (`--decisions`).
 4. **Gap analysis** counts only high-confidence or analyst-accepted mappings as coverage. Gaps are ranked High or Medium.
-5. **Strategy** regroups the same numbers into the four lenses. It adds no new scoring, so it can always be traced back to the mapping.
+5. **Strategy** regroups the same coverage numbers into the four lenses, then **threat ranking** scores the open gaps against ATT&CK techniques. Every score traces back to a mapping.
 6. **Optional LLM second opinion** (`--llm`): an LLM re-scores the candidates the baseline found. It cannot add new controls, must justify each verdict, and any failure falls back to the baseline.
 
 ## Design choices
@@ -57,6 +64,8 @@ Policy file → Parser → Mapper → Analyst review → Gap analysis → Strate
 | LLM can only re-rank | Prevents invented control mappings |
 | Low confidence is not coverage | A weak match must never make a gap look closed |
 | Posture follows the weakest lens | One open flank is enough for an attacker |
+| Fix-first ranked by attacker risk | Leaders fix what attackers actually use, not what is alphabetically first |
+| Threat data labeled as curated | Does not pretend to be the official MITRE mapping |
 | Every control sits in exactly one lens | Enforced by a test, so nothing is counted twice or missed |
 | Human decisions file | Keeps a record of who accepted what |
 | No real client data | Public frameworks and a fictional sample policy only |
@@ -82,12 +91,14 @@ python3 -m controlmapper policy.md --llm
 pip install pytest && python3 -m pytest -q
 ```
 
-52 tests cover the parser, mapper accuracy on known statements, review flags, decisions, gap math, the strategy lenses and posture bands, reports, the LLM reviewer (with a fake client, no network), and the CLI.
+64 tests cover the parser, mapper accuracy on known statements, review flags, decisions, gap math, the strategy lenses and posture bands, ATT&CK exposure and ranking math, reports, the LLM reviewer (with a fake client, no network), and the CLI.
 
 ## Limits (read these)
 
 - The catalog is a curated subset of 800-53 (42 controls), not the full set.
 - The lens groupings and posture bands are a judgment call, not a standard. They are documented in `controlmapper/strategy.py` and easy to change.
+- The ATT&CK technique list (27 techniques), its control links, and its weights are curated by hand, not the official CTID mapping. See `controlmapper/threat.py`.
+- Fix-first only looks at the weakest lens. A bigger threat in another lens still shows up in the attack paths table.
 - Keyword and TF-IDF matching misses unusual wording. That is why the review queue exists.
 - Some false positives happen, for example AT-3 on a general training statement. They land in review, not in coverage.
 - Control descriptions are plain-language summaries, not official NIST text.
@@ -96,7 +107,7 @@ pip install pytest && python3 -m pytest -q
 ## Roadmap
 
 - Full 800-53 catalog from NIST OSCAL JSON
-- Threat-informed ranking with MITRE ATT&CK ("know the enemy" with real attacker data)
+- Load the official MITRE CTID NIST 800-53 to ATT&CK mapping instead of the curated set
 - ISO 27001 and SOC 2 crosswalks
 - Evidence tracking per control
 - Streamlit review interface

@@ -312,8 +312,8 @@ def test_fix_first_is_ranked_and_limited(mapper):
     results = mapper.map_all(parse_policy(SAMPLE.read_text()))
     s = strat.assess(analyze(results))
     assert 0 < len(s.fix_first) <= 5
-    prios = [priority(c) for c in s.fix_first]
-    assert prios == sorted(prios, key=lambda p: p != "High")
+    scores = [s.threat.control_scores.get(c, 0.0) for c in s.fix_first]
+    assert scores == sorted(scores, reverse=True), "fix-first must be ordered by threat score"
     assert "AU-2" in s.fix_first
 
 
@@ -347,3 +347,100 @@ def test_report_includes_strategy_section_and_json(mapper):
     data = json.loads(to_json(results, cov, "sample.md"))
     assert data["strategy"]["overall_posture"] in {"Fortified", "Defensible", "Exposed", "Open ground"}
     assert len(data["strategy"]["lenses"]) == 4
+
+
+# ---------- threat (MITRE ATT&CK) ----------
+
+import re  # noqa: E402
+
+from controlmapper import threat  # noqa: E402
+
+ALL_IDS = [c.id for c in CATALOG]
+
+
+def test_technique_data_is_valid():
+    ids = [t.id for t in threat.TECHNIQUES]
+    assert len(ids) == len(set(ids))
+    for t in threat.TECHNIQUES:
+        assert re.fullmatch(r"T\d{4}", t.id)
+        assert t.weight in (1, 2, 3)
+        assert t.controls and all(c in BY_ID for c in t.controls)
+        assert len(set(t.controls)) == len(t.controls)
+
+
+def test_nothing_covered_means_everything_undefended():
+    view = threat.assess([], ALL_IDS)
+    assert all(v.status == "Undefended" and v.exposure == 1.0 for v in view.techniques)
+    assert view.techniques[0].risk == 3.0  # a weight-3 technique leads
+
+
+def test_everything_covered_means_no_exposure():
+    view = threat.assess(ALL_IDS, ALL_IDS)
+    assert all(v.risk == 0 and v.status == "Defended" for v in view.techniques)
+    assert view.control_scores == {}
+    assert "No exposed techniques" in "\n".join(threat.to_markdown(view))
+
+
+def test_exposure_math_for_one_technique():
+    # T1110 Brute Force needs AC-7, IA-5, IA-2. Cover only IA-2.
+    view = threat.assess(["IA-2"], ALL_IDS)
+    v = next(x for x in view.techniques if x.technique.id == "T1110")
+    assert v.covered == ["IA-2"] and set(v.missing) == {"AC-7", "IA-5"}
+    assert v.exposure == round(2 / 3, 3)
+    assert v.risk == round(2 * 2 / 3, 3)
+    assert v.status == "Weakly defended"
+
+
+def test_techniques_are_ranked_riskiest_first():
+    view = threat.assess(["IA-2", "SC-7"], ALL_IDS)
+    risks = [v.risk for v in view.techniques]
+    assert risks == sorted(risks, reverse=True)
+
+
+def test_control_scores_favor_controls_that_close_more_risk():
+    view = threat.assess([], ALL_IDS)
+    # SC-7 and AC-6 each help stop many techniques; PE-2 helps stop one weight-1 technique.
+    assert view.control_scores["SC-7"] > view.control_scores["PE-2"]
+    assert view.control_scores["AC-6"] > view.control_scores["PE-2"]
+
+
+def test_covering_a_control_lowers_its_score_to_zero():
+    view = threat.assess(["SC-7"], ALL_IDS)
+    assert "SC-7" not in view.control_scores
+    assert "SC-7" not in view.blocks
+
+
+def test_scope_limits_techniques():
+    view = threat.assess([], ["PE-2", "CM-8"])
+    assert {v.technique.id for v in view.techniques} == {"T1200"}
+
+
+def test_empty_scope_is_safe():
+    view = threat.assess([], [])
+    assert view.techniques == [] and view.control_scores == {}
+
+
+def test_sample_policy_leaves_exfiltration_undefended(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    cov = analyze(results)
+    view = strat.assess(cov).threat
+    exfil = next(v for v in view.techniques if v.technique.id == "T1041")
+    assert exfil.status == "Undefended"  # no boundary protection or monitoring in the sample
+
+
+def test_threat_dict_and_report_sections(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    cov = analyze(results)
+    md = to_markdown(results, cov, "sample.md")
+    assert "Know the enemy: likely attack paths" in md
+    assert "Helps stop" in md
+    assert "not the official MITRE Center for Threat-Informed Defense mapping" in md
+    data = json.loads(to_json(results, cov, "sample.md"))
+    t = data["strategy"]["threat"]
+    assert t["top_techniques"] and "note" in t
+    assert all(re.fullmatch(r"T\d{4}", x["id"]) for x in t["top_techniques"])
+
+
+def test_blocked_by_handles_unknown_control():
+    view = threat.assess([], ALL_IDS)
+    assert threat.blocked_by(view, "ZZ-9") == "none"

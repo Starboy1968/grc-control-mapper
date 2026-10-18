@@ -28,17 +28,29 @@
 
 *Question to answer:* Would we see an attack, and do we know what we own and where we are weak?
 
+### Know the enemy: likely attack paths
+
+Real attacker techniques (MITRE ATT&CK) that your policy leaves open, ranked by how often attackers use them and how much is missing. Source of the mapping is noted at the end of the report.
+
+| Rank | Technique | Tactic | Status | Close with |
+|---:|---|---|---|---|
+| 1 | T1566 Phishing | Initial Access | Weakly defended | SI-3, SC-7 |
+| 2 | T1041 Exfiltration Over C2 Channel | Exfiltration | Undefended | SC-7, SI-4 |
+| 3 | T1486 Data Encrypted for Impact | Impact | Weakly defended | CP-10, SI-3 |
+| 4 | T1070 Indicator Removal | Defense Evasion | Weakly defended | AU-2, AU-6, AU-11 |
+| 5 | T1562 Impair Defenses | Defense Evasion | Weakly defended | SI-3, AU-2, CM-2 |
+
 ### Fix first
 
-Ranked by risk. High-priority gaps come first, then claims no one has verified yet.
+Controls in the weakest lens, ranked by how much attacker risk each one closes. Ties go to high-priority controls, then to claims no one has verified yet.
 
-| Order | Control | Title | State |
-|---:|---|---|---|
-| 1 | AU-2 | Event Logging | No policy support |
-| 2 | AU-6 | Audit Record Review, Analysis, and Reporting | No policy support |
-| 3 | RA-3 | Risk Assessment | No policy support |
-| 4 | AU-11 | Audit Record Retention | No policy support |
-| 5 | CA-7 | Continuous Monitoring | No policy support |
+| Order | Control | Title | State | Helps stop |
+|---:|---|---|---|---|
+| 1 | SI-4 | System Monitoring | No policy support | T1003, T1041, T1048 |
+| 2 | AU-6 | Audit Record Review, Analysis, and Reporting | No policy support | T1078, T1098, T1136 |
+| 3 | AU-2 | Event Logging | No policy support | T1562, T1070 |
+| 4 | AU-11 | Audit Record Retention | No policy support | T1070 |
+| 5 | CM-8 | System Component Inventory | No policy support | T1200 |
 
 ### Unverified troops
 
@@ -162,3 +174,5 @@ Every statement mapped to at least one control.
 ---
 
 *Method: TF-IDF similarity plus keyword phrase matching. Scores are decision support, not audit evidence. A human reviews every low-confidence mapping.*
+
+*Threat data: MITRE ATT&CK Enterprise technique IDs and names. The technique-to-control links and attacker-use weights are a curated starting set, not the official MITRE Center for Threat-Informed Defense mapping.*

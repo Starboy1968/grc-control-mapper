@@ -25,12 +25,146 @@
     "overall_posture": "Open ground",
     "weakest_ground": "intelligence",
     "fix_first": [
-      "AU-2",
+      "SI-4",
       "AU-6",
-      "RA-3",
+      "AU-2",
       "AU-11",
-      "CA-7"
+      "CM-8"
     ],
+    "threat": {
+      "note": "Curated starting set, not the official MITRE CTID mapping.",
+      "top_techniques": [
+        {
+          "id": "T1566",
+          "name": "Phishing",
+          "tactic": "Initial Access",
+          "status": "Weakly defended",
+          "risk": 2.0,
+          "missing_controls": [
+            "SI-3",
+            "SC-7"
+          ]
+        },
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "tactic": "Exfiltration",
+          "status": "Undefended",
+          "risk": 2.0,
+          "missing_controls": [
+            "SC-7",
+            "SI-4"
+          ]
+        },
+        {
+          "id": "T1486",
+          "name": "Data Encrypted for Impact",
+          "tactic": "Impact",
+          "status": "Weakly defended",
+          "risk": 1.5,
+          "missing_controls": [
+            "CP-10",
+            "SI-3"
+          ]
+        },
+        {
+          "id": "T1070",
+          "name": "Indicator Removal",
+          "tactic": "Defense Evasion",
+          "status": "Weakly defended",
+          "risk": 1.5,
+          "missing_controls": [
+            "AU-2",
+            "AU-6",
+            "AU-11"
+          ]
+        },
+        {
+          "id": "T1562",
+          "name": "Impair Defenses",
+          "tactic": "Defense Evasion",
+          "status": "Weakly defended",
+          "risk": 1.5,
+          "missing_controls": [
+            "SI-3",
+            "AU-2",
+            "CM-2"
+          ]
+        },
+        {
+          "id": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "tactic": "Execution",
+          "status": "Weakly defended",
+          "risk": 1.333,
+          "missing_controls": [
+            "CM-2",
+            "SI-3"
+          ]
+        },
+        {
+          "id": "T1195",
+          "name": "Supply Chain Compromise",
+          "tactic": "Initial Access",
+          "status": "Weakly defended",
+          "risk": 1.333,
+          "missing_controls": [
+            "SR-2",
+            "SA-9"
+          ]
+        },
+        {
+          "id": "T1204",
+          "name": "User Execution",
+          "tactic": "Execution",
+          "status": "Weakly defended",
+          "risk": 1.333,
+          "missing_controls": [
+            "SI-3",
+            "CM-2"
+          ]
+        },
+        {
+          "id": "T1567",
+          "name": "Exfiltration Over Web Service",
+          "tactic": "Exfiltration",
+          "status": "Weakly defended",
+          "risk": 1.333,
+          "missing_controls": [
+            "SC-7",
+            "SI-4"
+          ]
+        },
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access",
+          "status": "Weakly defended",
+          "risk": 1.0,
+          "missing_controls": [
+            "SC-7"
+          ]
+        }
+      ],
+      "control_threat_scores": {
+        "SC-7": 5.667,
+        "SI-3": 4.083,
+        "CM-2": 3.0,
+        "SI-4": 2.499,
+        "AU-6": 2.016,
+        "CP-10": 1.75,
+        "AU-2": 1.0,
+        "SA-9": 1.0,
+        "SR-2": 1.0,
+        "AC-7": 0.667,
+        "AC-3": 0.5,
+        "AU-11": 0.5,
+        "CM-8": 0.5,
+        "CP-2": 0.5,
+        "PE-2": 0.5,
+        "SC-13": 0.5
+      }
+    },
     "lenses": [
       {
         "key": "defense",

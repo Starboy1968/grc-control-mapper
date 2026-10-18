@@ -10,6 +10,7 @@ where it is open to attack, and what to fix first.
 from dataclasses import dataclass, field
 
 from .catalog import BY_ID, CATALOG
+from . import threat as threat_mod
 from .gaps import Coverage, priority
 
 
@@ -80,6 +81,7 @@ class Strategy:
     weakest: LensResult = None
     fix_first: list = field(default_factory=list)
     overall: str = ""
+    threat: threat_mod.ThreatView = None
 
 
 def assess(coverage: Coverage, baseline_ids=None) -> Strategy:
@@ -102,14 +104,18 @@ def assess(coverage: Coverage, baseline_ids=None) -> Strategy:
     if not results:
         return Strategy()
 
+    threat = threat_mod.assess(coverage.covered, scope)
     weakest = min(results, key=lambda r: (r.percent, r.lens.key))
     todo = weakest.open_gaps + weakest.unverified
-    todo = sorted(todo, key=lambda c: (priority(c) != "High", c in weakest.unverified, c))
+    # Rank by how much attacker risk each control closes, then by static priority.
+    todo = sorted(todo, key=lambda c: (-threat.control_scores.get(c, 0.0),
+                                       priority(c) != "High", c in weakest.unverified, c))
     return Strategy(
         lenses=results,
         weakest=weakest,
         fix_first=todo[:5],
         overall=weakest.posture,
+        threat=threat,
     )
 
 
@@ -120,6 +126,7 @@ def to_dict(s: Strategy) -> dict:
         "overall_posture": s.overall,
         "weakest_ground": s.weakest.lens.key,
         "fix_first": s.fix_first,
+        "threat": threat_mod.to_dict(s.threat),
         "lenses": [
             {
                 "key": r.lens.key,
@@ -157,13 +164,16 @@ def to_markdown(s: Strategy) -> list:
     lines += ["", "### Weakest ground", "",
               f"**{w.lens.name}.** {w.lens.principle}", "",
               f"*Question to answer:* {w.lens.question}", ""]
+    lines += threat_mod.to_markdown(s.threat)
     if s.fix_first:
         lines += ["### Fix first", "",
-                  "Ranked by risk. High-priority gaps come first, then claims no one has verified yet.", "",
-                  "| Order | Control | Title | State |", "|---:|---|---|---|"]
+                  "Controls in the weakest lens, ranked by how much attacker risk each one closes. "
+                  "Ties go to high-priority controls, then to claims no one has verified yet.", "",
+                  "| Order | Control | Title | State | Helps stop |", "|---:|---|---|---|---|"]
         for i, cid in enumerate(s.fix_first, 1):
             state = "Unverified claim" if cid in w.unverified else "No policy support"
-            lines.append(f"| {i} | {cid} | {BY_ID[cid].title} | {state} |")
+            stops = threat_mod.blocked_by(s.threat, cid)
+            lines.append(f"| {i} | {cid} | {BY_ID[cid].title} | {state} | {stops} |")
         lines.append("")
     unverified = [(r.lens.name, c) for r in s.lenses for c in r.unverified]
     if unverified:
