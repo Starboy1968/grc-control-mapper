@@ -1,0 +1,540 @@
+{
+  "source": "acme_infosec_policy.md",
+  "generated": "2026-10-17",
+  "coverage_percent": 42.9,
+  "gaps": [
+    "AC-1",
+    "AC-5",
+    "AU-2",
+    "AU-6",
+    "AU-11",
+    "CA-2",
+    "CA-7",
+    "CM-2",
+    "CM-8",
+    "CP-2",
+    "CP-10",
+    "PE-2",
+    "PM-9",
+    "RA-3",
+    "SI-3",
+    "SI-4",
+    "SR-2"
+  ],
+  "statements": [
+    {
+      "id": "S001",
+      "section": "1. Access Management",
+      "text": "User accounts must be approved by a manager before they are created.",
+      "mappings": [
+        {
+          "control": "AC-2",
+          "score": 0.603,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "user accounts"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "SC-13",
+          "score": 0.225,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "approv"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AC-7",
+          "score": 0.204,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "account"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S002",
+      "section": "1. Access Management",
+      "text": "Accounts shall be reviewed every quarter and disabled when no longer needed.",
+      "mappings": [
+        {
+          "control": "AC-2",
+          "score": 0.479,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "account",
+            "review"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AC-7",
+          "score": 0.227,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "account"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S003",
+      "section": "1. Access Management",
+      "text": "All employees must use multi-factor authentication to access company systems.",
+      "mappings": [
+        {
+          "control": "IA-2",
+          "score": 0.915,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "multi-factor authentication",
+            "authentication"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AC-3",
+          "score": 0.193,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "acces",
+            "system"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S004",
+      "section": "1. Access Management",
+      "text": "Passwords must be at least 14 characters and must not be reused.",
+      "mappings": [
+        {
+          "control": "IA-5",
+          "score": 0.582,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "password"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AC-6",
+          "score": 0.227,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "least"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S005",
+      "section": "1. Access Management",
+      "text": "Staff shall be given only the access required to do their job.",
+      "mappings": [
+        {
+          "control": "AC-6",
+          "score": 0.89,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "only the access",
+            "access required",
+            "job"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S006",
+      "section": "1. Access Management",
+      "text": "Remote access to the network must go through the company VPN.",
+      "mappings": [
+        {
+          "control": "AC-17",
+          "score": 1.0,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "remote access",
+            "vpn"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "SC-7",
+          "score": 0.215,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "network"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S007",
+      "section": "2. Incident Response",
+      "text": "The security team shall maintain an incident response plan and test it at least once a year.",
+      "mappings": [
+        {
+          "control": "IR-8",
+          "score": 0.72,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "incident response plan",
+            "maintain"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "IR-4",
+          "score": 0.56,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "incident response",
+            "security"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "IR-5",
+          "score": 0.247,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "incident",
+            "security"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S008",
+      "section": "2. Incident Response",
+      "text": "All employees must report suspected security incidents to the security team within 24 hours.",
+      "mappings": [
+        {
+          "control": "IR-4",
+          "score": 0.545,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "security incident"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "IR-6",
+          "score": 0.468,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "incident",
+            "report",
+            "suspect"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "IR-5",
+          "score": 0.334,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "incident",
+            "security"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S009",
+      "section": "2. Incident Response",
+      "text": "The company will notify affected customers and regulators of a breach as required by law.",
+      "mappings": [
+        {
+          "control": "IR-6",
+          "score": 0.896,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "notify",
+            "regulators",
+            "breach"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S010",
+      "section": "3. Data Protection",
+      "text": "Customer data must be encrypted in transit using TLS 1.2 or higher.",
+      "mappings": [
+        {
+          "control": "SC-8",
+          "score": 0.88,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "tls",
+            "data",
+            "transit"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S011",
+      "section": "3. Data Protection",
+      "text": "Sensitive data stored on laptops and servers shall be encrypted at rest.",
+      "mappings": [
+        {
+          "control": "SC-28",
+          "score": 0.707,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "data",
+            "rest",
+            "stor"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S012",
+      "section": "3. Data Protection",
+      "text": "Backups of critical systems must be taken daily and stored offsite.",
+      "mappings": [
+        {
+          "control": "CP-9",
+          "score": 0.985,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "backup",
+            "backups",
+            "offsite",
+            "system"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "SC-28",
+          "score": 0.202,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "stor"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S013",
+      "section": "3. Data Protection",
+      "text": "Retired hard drives must be physically destroyed before disposal.",
+      "mappings": [
+        {
+          "control": "MP-6",
+          "score": 0.755,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "physically destroyed",
+            "before",
+            "disposal"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S014",
+      "section": "4. Vulnerability and Change Management",
+      "text": "Critical security patches must be applied within 14 days of release.",
+      "mappings": [
+        {
+          "control": "SI-2",
+          "score": 0.773,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "patches",
+            "security patches"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S015",
+      "section": "4. Vulnerability and Change Management",
+      "text": "Vulnerability scans shall be run monthly on all production systems.",
+      "mappings": [
+        {
+          "control": "RA-5",
+          "score": 0.696,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "vulnerability scan"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S016",
+      "section": "4. Vulnerability and Change Management",
+      "text": "All changes to production systems must be approved through a documented change request.",
+      "mappings": [
+        {
+          "control": "CM-3",
+          "score": 0.781,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "change request",
+            "document",
+            "system"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "SC-13",
+          "score": 0.181,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "approv"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S017",
+      "section": "5. Workforce",
+      "text": "New hires must complete security awareness training within 30 days and annually afterward.",
+      "mappings": [
+        {
+          "control": "AT-2",
+          "score": 0.853,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "security awareness",
+            "train"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AT-3",
+          "score": 0.422,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "security",
+            "train"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S018",
+      "section": "5. Workforce",
+      "text": "Background checks are required for all employees before they receive system access.",
+      "mappings": [
+        {
+          "control": "PS-3",
+          "score": 0.637,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "background check",
+            "acces",
+            "before"
+          ],
+          "source": "baseline"
+        },
+        {
+          "control": "AC-6",
+          "score": 0.196,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "acces",
+            "requir"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S019",
+      "section": "5. Workforce",
+      "text": "Access must be revoked on the employee's last day.",
+      "mappings": [
+        {
+          "control": "PS-4",
+          "score": 0.695,
+          "confidence": "high",
+          "needs_review": false,
+          "matched_terms": [
+            "last day",
+            "acces",
+            "revok"
+          ],
+          "source": "baseline"
+        }
+      ]
+    },
+    {
+      "id": "S020",
+      "section": "6. Third Parties",
+      "text": "Vendors that handle company data must be assessed for security before a contract is signed.",
+      "mappings": [
+        {
+          "control": "SA-9",
+          "score": 0.392,
+          "confidence": "low",
+          "needs_review": true,
+          "matched_terms": [
+            "vendor",
+            "security"
+          ],
+          "source": "baseline"
+        }
+      ]
+    }
+  ]
+}

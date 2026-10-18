@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grc-control-mapper"
+version = "0.1.0"
+description = "Map security policies to NIST 800-53 controls, find gaps, queue weak matches for human review."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Rashon Alsberry" }]
+
+[project.optional-dependencies]
+llm = ["anthropic"]
+dev = ["pytest"]
+
+[project.scripts]
+controlmapper = "controlmapper.cli:main"
+
+[tool.setuptools]
+packages = ["controlmapper"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
