@@ -278,3 +278,72 @@ def test_cli_bad_baseline(tmp_path, capsys):
     base = tmp_path / "base.txt"
     base.write_text("ZZ-1\n")
     assert main([str(SAMPLE), "-o", str(tmp_path), "--baseline", str(base)]) == 2
+
+
+# ---------- strategy (Art of War lens) ----------
+
+from controlmapper import strategy as strat  # noqa: E402
+from controlmapper.gaps import Coverage  # noqa: E402
+
+
+def test_lenses_partition_the_catalog_exactly():
+    all_lens = [c for lens in strat.LENSES for c in lens.controls]
+    assert len(all_lens) == len(set(all_lens)), "a control sits in two lenses"
+    assert set(all_lens) == {c.id for c in CATALOG}, "a control is in no lens"
+
+
+@pytest.mark.parametrize("pct,label", [
+    (100, "Fortified"), (75, "Fortified"), (74.9, "Defensible"), (50, "Defensible"),
+    (49.9, "Exposed"), (25, "Exposed"), (24.9, "Open ground"), (0, "Open ground"),
+])
+def test_posture_bands(pct, label):
+    assert strat.posture(pct) == label
+
+
+def test_weakest_lens_sets_overall_posture(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    s = strat.assess(analyze(results))
+    assert s.weakest.percent == min(r.percent for r in s.lenses)
+    assert s.overall == s.weakest.posture
+    assert s.weakest.lens.key == "intelligence"  # sample policy has no logging or monitoring
+
+
+def test_fix_first_is_ranked_and_limited(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    s = strat.assess(analyze(results))
+    assert 0 < len(s.fix_first) <= 5
+    prios = [priority(c) for c in s.fix_first]
+    assert prios == sorted(prios, key=lambda p: p != "High")
+    assert "AU-2" in s.fix_first
+
+
+def test_strategy_respects_custom_baseline(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    cov = analyze(results, ["IA-2", "AU-2"])
+    s = strat.assess(cov)
+    total_in_scope = sum(len(r.in_scope) for r in s.lenses)
+    assert total_in_scope == 2
+    assert s.weakest.lens.key == "intelligence"
+
+
+def test_strategy_with_empty_coverage_is_safe():
+    s = strat.assess(Coverage())
+    assert s.lenses == [] and strat.to_markdown(s) == [] and strat.to_dict(s) == {}
+
+
+def test_fully_covered_is_fortified():
+    ids = [c.id for c in CATALOG]
+    cov = Coverage(covered={i: ["S001"] for i in ids}, gaps=[], percent=100.0)
+    s = strat.assess(cov)
+    assert s.overall == "Fortified" and s.fix_first == []
+
+
+def test_report_includes_strategy_section_and_json(mapper):
+    results = mapper.map_all(parse_policy(SAMPLE.read_text()))
+    cov = analyze(results)
+    md = to_markdown(results, cov, "sample.md")
+    assert "Strategic assessment (Art of War lens)" in md
+    assert "Fix first" in md and "Weakest ground" in md
+    data = json.loads(to_json(results, cov, "sample.md"))
+    assert data["strategy"]["overall_posture"] in {"Fortified", "Defensible", "Exposed", "Open ground"}
+    assert len(data["strategy"]["lenses"]) == 4

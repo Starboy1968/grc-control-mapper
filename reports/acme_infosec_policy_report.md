@@ -11,6 +11,47 @@
 - **17** controls have no supporting statement (gaps).
 - **13** mappings are low confidence and need analyst review.
 
+## Strategic assessment (Art of War lens)
+
+**Overall posture: Open ground.** An attacker strikes where you are weakest, so the posture is set by the weakest lens, not the average (Ch. VI, Weak Points and Strong).
+
+| Lens | Chapter | Covered | Posture |
+|---|---|---:|---|
+| Defense: be unbeatable first | Ch. IV, Tactical Dispositions | 10/16 (62.5%) | Defensible |
+| Intelligence: know the enemy and yourself | Ch. III and XIII, Attack by Stratagem and Use of Spies | 1/8 (12.5%) | Open ground |
+| Speed: a long fight drains you | Ch. II, Waging War | 3/6 (50.0%) | Defensible |
+| Discipline: clear command, trained people | Ch. I, Laying Plans | 4/12 (33.3%) | Exposed |
+
+### Weakest ground
+
+**Intelligence: know the enemy and yourself.** Knowing both the enemy and yourself, you can face many battles without fear. Good intelligence decides the outcome.
+
+*Question to answer:* Would we see an attack, and do we know what we own and where we are weak?
+
+### Fix first
+
+Ranked by risk. High-priority gaps come first, then claims no one has verified yet.
+
+| Order | Control | Title | State |
+|---:|---|---|---|
+| 1 | AU-2 | Event Logging | No policy support |
+| 2 | AU-6 | Audit Record Review, Analysis, and Reporting | No policy support |
+| 3 | RA-3 | Risk Assessment | No policy support |
+| 4 | AU-11 | Audit Record Retention | No policy support |
+| 5 | CA-7 | Continuous Monitoring | No policy support |
+
+### Unverified troops
+
+These controls have only weak policy support. Treat them as untested until an analyst confirms them.
+
+- AC-3 Access Enforcement (Defense)
+- AC-7 Unsuccessful Logon Attempts (Defense)
+- SC-7 Boundary Protection (Defense)
+- SC-13 Cryptographic Protection (Defense)
+- IR-5 Incident Monitoring (Speed)
+- AT-3 Role-Based Training (Discipline)
+- SA-9 External System Services (Discipline)
+
 ## Coverage by control family
 
 | Family | Covered | Total | % |

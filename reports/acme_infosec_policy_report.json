@@ -21,6 +21,112 @@
     "SI-4",
     "SR-2"
   ],
+  "strategy": {
+    "overall_posture": "Open ground",
+    "weakest_ground": "intelligence",
+    "fix_first": [
+      "AU-2",
+      "AU-6",
+      "RA-3",
+      "AU-11",
+      "CA-7"
+    ],
+    "lenses": [
+      {
+        "key": "defense",
+        "name": "Defense: be unbeatable first",
+        "chapter": "Ch. IV, Tactical Dispositions",
+        "percent": 62.5,
+        "posture": "Defensible",
+        "covered": [
+          "IA-2",
+          "IA-5",
+          "AC-2",
+          "AC-6",
+          "AC-17",
+          "SC-8",
+          "SC-28",
+          "SI-2",
+          "CM-3",
+          "CP-9"
+        ],
+        "unverified": [
+          "AC-3",
+          "AC-7",
+          "SC-7",
+          "SC-13"
+        ],
+        "gaps": [
+          "SI-3",
+          "CM-2"
+        ]
+      },
+      {
+        "key": "intelligence",
+        "name": "Intelligence: know the enemy and yourself",
+        "chapter": "Ch. III and XIII, Attack by Stratagem and Use of Spies",
+        "percent": 12.5,
+        "posture": "Open ground",
+        "covered": [
+          "RA-5"
+        ],
+        "unverified": [],
+        "gaps": [
+          "AU-2",
+          "AU-6",
+          "AU-11",
+          "SI-4",
+          "CA-7",
+          "RA-3",
+          "CM-8"
+        ]
+      },
+      {
+        "key": "speed",
+        "name": "Speed: a long fight drains you",
+        "chapter": "Ch. II, Waging War",
+        "percent": 50.0,
+        "posture": "Defensible",
+        "covered": [
+          "IR-4",
+          "IR-6",
+          "IR-8"
+        ],
+        "unverified": [
+          "IR-5"
+        ],
+        "gaps": [
+          "CP-2",
+          "CP-10"
+        ]
+      },
+      {
+        "key": "discipline",
+        "name": "Discipline: clear command, trained people",
+        "chapter": "Ch. I, Laying Plans",
+        "percent": 33.3,
+        "posture": "Exposed",
+        "covered": [
+          "AT-2",
+          "PS-3",
+          "PS-4",
+          "MP-6"
+        ],
+        "unverified": [
+          "AT-3",
+          "SA-9"
+        ],
+        "gaps": [
+          "AC-1",
+          "AC-5",
+          "PE-2",
+          "PM-9",
+          "SR-2",
+          "CA-2"
+        ]
+      }
+    ]
+  },
   "statements": [
     {
       "id": "S001",

@@ -5,6 +5,7 @@ from datetime import date
 
 from .catalog import BY_ID
 from .gaps import Coverage, priority
+from . import strategy as strat
 
 
 def _short(text: str, n: int = 140) -> str:
@@ -18,6 +19,7 @@ def to_json(results: list, coverage: Coverage, source: str = "") -> str:
         "generated": date.today().isoformat(),
         "coverage_percent": coverage.percent,
         "gaps": coverage.gaps,
+        "strategy": strat.to_dict(strat.assess(coverage)),
         "statements": [
             {
                 "id": r.statement.id,
@@ -59,6 +61,9 @@ def to_markdown(results: list, coverage: Coverage, source: str = "") -> str:
         f"- **{len(coverage.gaps)}** controls have no supporting statement (gaps).",
         f"- **{len(review)}** mappings are low confidence and need analyst review.",
         "",
+    ]
+    lines += strat.to_markdown(strat.assess(coverage))
+    lines += [
         "## Coverage by control family",
         "",
         "| Family | Covered | Total | % |",
